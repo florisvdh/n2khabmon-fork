@@ -37,6 +37,16 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Protect against RSPM source/binary collisions (https://github.com/r-lib/pak/issues/467)
+        run: |
+          options(
+            repos = c(
+              RSPM = "https://packagemanager.posit.co/cran/latest",
+              CRAN = "https://cloud.r-project.org"
+            )
+          )
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: ${{ secrets.CACHE_VERSION }}
